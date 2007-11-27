@@ -28,6 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   # map.root :controller => "welcome"
 
   # See how all your routes lay out with "rake routes"
+  map.oauth_request_token "oauth/request_token", :controller => "oauth", :action => "request_token"
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'

@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
+require 'mocha'
 
 class Test::Unit::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
@@ -33,4 +34,21 @@ class Test::Unit::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  
+  def stub_oauth!
+    # stub out OAuth signature verification
+    @controller.stubs(:verify_oauth_consumer_signature).returns(true)
+    @controller.stubs(:verify_oauth_signature).returns(true)
+  end
+
+  # Make an OAuth request with a specified token.
+  def with_oauth_token(token, &block)
+    oauth_token = token.is_a?(Symbol) ? oauth_tokens(token) : token
+
+    # oauth-provided attributes are used to retrieve data, so stub them
+    @controller.stubs(:oauth_token).returns(oauth_token)
+    @controller.stubs(:oauth_consumer).returns(oauth_token.app)
+
+    yield [oauth_token, oauth_token.app]
+  end
 end
