@@ -21,14 +21,19 @@ protected
     @oauth_consumer
   end
 
+  def oauth_request_proxy
+    @oauth_request_proxy
+  end
+
   def oauth_token
     @oauth_token
   end
 
   # verifies a request token request
   def verify_oauth_consumer_signature
-    valid = OAuth::Signature.verify(request) do |token, consumer_key|
-      @oauth_consumer = OauthConsumer.find_by_key(consumer_key)
+    valid = OAuth::Signature.verify(request) do |request_proxy|
+      @request_proxy = request_proxy
+      @oauth_consumer = OauthConsumer.find_by_key(request_proxy.oauth_consumer_key)
 
       # return the token secret and the consumer secret
       [nil, oauth_consumer.secret]
@@ -52,8 +57,9 @@ private
 
   # Implement this for your own application using app-specific models
   def verify_oauth_signature
-    valid = OAuth::Signature.verify(request) do |token|
-      @oauth_token = OauthToken.find_by_token(token, :include => :consumer)
+    valid = OAuth::Signature.verify(request) do |request_proxy|
+      @request_proxy = request_proxy
+      @oauth_token = OauthToken.find_by_token(request_proxy.oauth_token, :include => :consumer)
       @oauth_consumer = @oauth_token.consumer
 
       # return the token secret and the consumer secret

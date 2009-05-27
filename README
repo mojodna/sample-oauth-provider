@@ -1,1 +1,7 @@
-I am a sample OAuth provider built against a vanilla Rails 2.0.x app that does not use acts_as_authenticated.  It merely shows how your application could be OAuth-enabled and does not validate tokens or do anything particularly fancy with them.
+I am a sample OAuth provider built against a vanilla Rails 2.0.x app that does
+not use acts_as_authenticated. It merely shows how your application could be
+OAuth-enabled and does not validate tokens or do anything particularly fancy
+with them.
+
+Note: this is effectively pseudo-code, so don't expect it to work out of the
+box.

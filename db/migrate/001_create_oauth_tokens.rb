@@ -6,6 +6,9 @@ class CreateOauthTokens < ActiveRecord::Migration
       t.string  :token
       t.string  :secret
       t.string  :type
+      t.boolean :validated, :null => false, :default => false
+      t.string  :callback_url
+      t.string  :verifier
       t.timestamps
     end
   end
